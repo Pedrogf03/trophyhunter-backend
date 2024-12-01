@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "achievement")
 @Getter
@@ -15,20 +18,22 @@ import lombok.Setter;
 public class Achievement {
 
     @Id
-    @Column(name = "id_achievement")
-    private Long idAchievement;
+    private Long idAchievement; // ID proporcionado por la API RAWG
 
     @ManyToOne
-    @JoinColumn(name = "id_game", referencedColumnName = "id_game")
+    @JoinColumn(name = "id_game", nullable = false)
     private Game game;
 
-    @Column(name = "name")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description")
+    @Column(length = 500)
     private String description;
 
-    @Column(name = "rarity_percentage")
-    private int rarityPercentage;
-}
+    @Column(name = "rarity_percentage", nullable = false)
+    private Integer rarityPercentage;
 
+    @OneToMany(mappedBy = "achievement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAchievement> userAchievements = new ArrayList<>();
+
+}

@@ -1,33 +1,38 @@
 package com.trophyhunter.trophyhunter_backend.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
-@Data
+@Table(name = "user_achievement")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAchievement {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user_achievement")
-    private int idUserAchievement;
+
+    @EmbeddedId
+    private UserAchievementId id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user_game")
-    private UserGame userGame;
+    @MapsId("userId") // Vincula la clave primaria compuesta con el campo user
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_achievement")
+    @MapsId("achievementId") // Vincula la clave primaria compuesta con el campo achievement
+    @JoinColumn(name = "id_achievement", nullable = false)
     private Achievement achievement;
 
-    @Column(name = "is_completed")
-    private Boolean isCompleted;
+    @Column(name = "is_completed", nullable = false)
+    private Boolean isCompleted = false;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "completion_date")
     private Date completionDate;
 }
