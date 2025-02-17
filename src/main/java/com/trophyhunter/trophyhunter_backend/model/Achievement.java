@@ -1,5 +1,6 @@
 package com.trophyhunter.trophyhunter_backend.model;
 
+import com.trophyhunter.trophyhunter_backend.dto.AchievementDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +36,19 @@ public class Achievement {
 
     @OneToMany(mappedBy = "achievement", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAchievement> userAchievements = new ArrayList<>();
+
+    public static Achievement toEntity(AchievementDTO dto, Game game) {
+        if (dto == null) {
+            return null;
+        }
+        return new Achievement(
+                dto.getIdAchievement(),
+                game,
+                dto.getName(),
+                dto.getDescription(),
+                dto.getRarityPercentage(),
+                new ArrayList<>()
+        );
+    }
 
 }

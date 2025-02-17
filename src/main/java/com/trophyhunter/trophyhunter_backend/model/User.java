@@ -1,5 +1,6 @@
 package com.trophyhunter.trophyhunter_backend.model;
 
+import com.trophyhunter.trophyhunter_backend.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,5 +49,22 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAchievement> userAchievements = new ArrayList<>();
+
+    public static User toEntity(UserDTO dto, String encryptedPassword) {
+        if (dto == null) {
+            return null;
+        }
+        User user = new User();
+        user.setIdUser(dto.getIdUser().intValue()); // Convertimos Long a Integer
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(encryptedPassword); // Se necesita una contraseña en la entidad
+        user.setIsPublic(dto.isPublic());
+        user.setRegDate(dto.getRegDate());
+        user.setGames(new ArrayList<>()); // Lista de juegos vacía por defecto
+        user.setUserAchievements(new ArrayList<>()); // Lista de logros vacía por defecto
+        return user;
+    }
+
 
 }

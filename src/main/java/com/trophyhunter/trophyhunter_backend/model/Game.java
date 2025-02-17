@@ -1,5 +1,6 @@
 package com.trophyhunter.trophyhunter_backend.model;
 
+import com.trophyhunter.trophyhunter_backend.dto.GameDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +39,21 @@ public class Game {
 
     @ManyToMany(mappedBy = "games")
     private List<User> users = new ArrayList<>();
+
+    public static Game toEntity(GameDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        return new Game(
+                dto.getIdGame(),
+                dto.getTitle(),
+                dto.getDeveloper(),
+                dto.getPlatform(),
+                dto.getImage(),
+                dto.getReleaseDate(),
+                new ArrayList<>() // Inicializamos la lista vacía de usuarios
+        );
+    }
+
 
 }

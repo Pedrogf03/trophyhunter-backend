@@ -1,5 +1,6 @@
 package com.trophyhunter.trophyhunter_backend.model;
 
+import com.trophyhunter.trophyhunter_backend.dto.UserAchievementDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,4 +36,19 @@ public class UserAchievement {
     @Temporal(TemporalType.DATE)
     @Column(name = "completion_date")
     private Date completionDate;
+
+    public static UserAchievement toEntity(UserAchievementDTO dto, User user, Achievement achievement) {
+        if (dto == null || user == null || achievement == null) {
+            return null;
+        }
+        UserAchievementId id = new UserAchievementId(user.getIdUser(), achievement.getIdAchievement());
+        return new UserAchievement(
+                id,
+                user,
+                achievement,
+                dto.isCompleted(),
+                dto.getCompletionDate()
+        );
+    }
+
 }
